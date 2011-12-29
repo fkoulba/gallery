@@ -1,4 +1,10 @@
 Gallery::Application.routes.draw do
+  get "photos/index"
+
+  get "photos/show"
+
+  match "photos/upload"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
