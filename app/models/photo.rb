@@ -8,7 +8,7 @@ class Photo
     File.join(Rails.root, 'public', self.web_path)
   end
 
-  def self.scan
+  def self.all
     Dir.glob(File.join(self.root_path, '*.{jpg,JPG}')).collect do |filename|
       self.init_with_filename(File.basename(filename))
     end
