@@ -33,3 +33,5 @@ gem 'jquery-rails'
 
 gem 'therubyracer'
 
+gem "paperclip", :git => "http://github.com/thoughtbot/paperclip.git"
+

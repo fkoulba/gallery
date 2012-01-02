@@ -2,5 +2,5 @@
 <p>Find me in app/views/photos/index.html.erb</p>
 
 <% @photos.each do |photo| -%>
-  <%= image_tag(photo.web_path, :size => '100x100') %>
+  <%= image_tag(photo.image.url(:thumb), :size => '100x100') %>
 <% end -%>

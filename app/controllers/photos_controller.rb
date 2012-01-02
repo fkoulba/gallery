@@ -9,8 +9,11 @@ class PhotosController < ApplicationController
 
   def upload
     if request.post?
-      params['photos'].each do |photo|
-        Photo.upload(photo)
+      params['images'].each do |image|
+        photo = Photo.new(:image => image)
+        photo.title = photo.image_file_name
+        photo.shot_at = DateTime.now
+        photo.save
       end
     end
   end

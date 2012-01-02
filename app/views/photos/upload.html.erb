@@ -2,6 +2,6 @@
 <p>Find me in app/views/photos/upload.html.erb</p>
 
 <%= form_tag({}, { :multipart => true }) do %>
-  <%= file_field_tag 'photos[]', :multiple => true %>
+  <%= file_field_tag 'images[]', :multiple => true %>
   <%= submit_tag %>
 <% end %>
