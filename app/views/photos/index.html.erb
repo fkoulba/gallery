@@ -4,7 +4,7 @@
 <div class="photos_list">
   <% @photos.each do |photo| -%>
     <div class="photo_thumb">
-      <div class="image"><%= image_tag(photo.image.url(:thumb), :size => '100x100') %></div>
+      <div class="image"><%= link_to(image_tag(photo.image.url(:thumb), :size => '100x100'), photo_url(:id => photo.id)) %></div>
       <div class="title"><%= photo.title %></div>
     </div>
   <% end -%>
