@@ -1,4 +1,8 @@
 <h1>Photos#show</h1>
 <p>Find me in app/views/photos/show.html.erb</p>
 
-<div><%= image_tag(@photo.image.url) %></div>
+<div class="image"><%= image_tag(@photo.image.url) %></div>
+<div class="title"><%= @photo.title %></div>
+<% unless @photo.tag_list.empty? -%>
+  <div class="tags"><%= @photo.tag_list %></div>
+<% end -%>

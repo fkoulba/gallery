@@ -6,6 +6,7 @@
     <div class="photo_thumb">
       <div class="image"><%= link_to(image_tag(photo.image.url(:thumb), :size => '100x100'), photo_url(:id => photo.id)) %></div>
       <div class="title"><%= photo.title %></div>
+      <div class="tags"><%= photo.tag_list %></div>
     </div>
   <% end -%>
 </div>
