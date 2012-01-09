@@ -1,5 +1,5 @@
 Gallery::Application.routes.draw do
-  get "photos/index"
+  get "photos"
 
   get "photos/:id" => 'photos#show', :as => :photo
 
