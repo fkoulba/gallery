@@ -37,3 +37,6 @@ gem "paperclip", :git => "http://github.com/thoughtbot/paperclip.git"
 
 gem 'acts-as-taggable-on', '~>2.2.0'
 
+gem 'carrierwave'
+gem 'mini_magick'
+

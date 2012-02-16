@@ -5,3 +5,4 @@ public/system/*
 tmp/
 .sass-cache/
 db/schema.rb
+uploads/*

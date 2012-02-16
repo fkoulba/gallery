@@ -41,7 +41,7 @@ class PhotosController < ApplicationController
     if request.post?
       params['images'].each do |image|
         photo = Photo.new(:image => image)
-        photo.title = photo.image_file_name
+        photo.title = photo.image.identifier
         photo.shot_at = DateTime.now
         photo.save
       end
