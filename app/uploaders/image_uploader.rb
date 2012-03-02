@@ -13,6 +13,8 @@ class ImageUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
+  process :fix_exif_rotation
+
   version :thumb do
     process :resize_to_fill => [100, 100]
   end
