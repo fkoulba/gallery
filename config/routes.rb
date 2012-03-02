@@ -1,8 +1,10 @@
 Gallery::Application.routes.draw do
 
-  match "photos/upload", :as => :upload_photos
-
-  resources :photos
+  resources :photos do
+    collection do
+      match 'upload'
+    end
+  end
 
 
   # The priority is based upon order of creation:
