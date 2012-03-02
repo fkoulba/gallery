@@ -21,4 +21,10 @@ class ImageUploader < CarrierWave::Uploader::Base
     %w(jpg jpeg gif png)
   end
 
+  def get_exif_tag(name)
+    manipulate! do |img|
+      return img['EXIF:' + name]
+    end
+  end
+
 end
