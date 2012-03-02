@@ -2,5 +2,5 @@
   - @photos.each do |photo|
     .photo_thumb
       .image= link_to(image_tag(photo.image.url(:thumb), :size => '100x100'), photo_url(:id => photo.id))
-      .title= photo.title
-      .tags= photo.tag_list
+      .title{ :title => photo.title }= photo.title
+      .tags{ :title => photo.tag_list }= photo.tag_list
