@@ -3,5 +3,27 @@
  * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
- *= require_tree . 
+ *= require_tree .
 */
+
+body {
+  color: #FFF;
+  background: #333;
+}
+
+.photos_list {
+  overflow: hidden;
+
+  .photo_thumb {
+    float: left;
+    width: 105px;
+    height: 145px;
+    margin: 0 10px 10px 0;
+    overflow: hidden;
+
+    img {
+      border: 1px solid #999;
+      box-shadow: 2px 2px 2px 0 #000;
+    }
+  }
+}
