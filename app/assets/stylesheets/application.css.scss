@@ -11,19 +11,39 @@ body {
   background: #333;
 }
 
-.photos_list {
-  overflow: hidden;
+.content {
+  margin-left: 220px;
 
-  .photo_thumb {
-    float: left;
-    width: 105px;
-    height: 145px;
-    margin: 0 10px 10px 0;
+  .photos_list {
     overflow: hidden;
 
-    img {
-      border: 1px solid #999;
-      box-shadow: 2px 2px 2px 0 #000;
+    .photo_thumb {
+      float: left;
+      width: 105px;
+      height: 145px;
+      margin: 0 10px 10px 0;
+      overflow: hidden;
+
+      img {
+        border: 1px solid #999;
+        box-shadow: 2px 2px 2px 0 #000;
+      }
     }
+  }
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  bottom: 0;
+
+  color: #000;
+  background: #EEE;
+
+  a {
+    color: #000;
+    text-decoration: none;
   }
 }
