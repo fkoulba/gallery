@@ -40,3 +40,5 @@ gem 'acts-as-taggable-on', '~>2.2.0'
 gem 'carrierwave'
 gem 'mini_magick'
 
+gem 'haml-rails'
+

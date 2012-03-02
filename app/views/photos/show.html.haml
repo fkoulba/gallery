@@ -1,0 +1,4 @@
+.image= image_tag(@photo.image.url)
+.title= @photo.title
+- unless @photo.tag_list.empty?
+  .tags= @photo.tag_list
