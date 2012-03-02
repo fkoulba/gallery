@@ -14,6 +14,9 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   process :fix_exif_rotation
+  process :strip
+  process :convert => 'jpg'
+  process :quality => 85
 
   version :thumb do
     process :resize_to_fill => [100, 100]
