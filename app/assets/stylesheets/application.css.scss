@@ -2,6 +2,7 @@
  * This is a manifest file that'll automatically include all the stylesheets available in this directory
  * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
  * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require reset
  *= require_self
  *= require_tree .
 */
@@ -12,7 +13,8 @@ body {
 }
 
 .content {
-  margin-left: 220px;
+  margin-left: 200px;
+  padding: 15px 20px;
 
   .photos_list {
     overflow: hidden;
@@ -36,11 +38,17 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  width: 160px;
   bottom: 0;
+  padding: 15px 20px;
 
   color: #000;
   background: #EEE;
+
+  ul {
+    list-style: disc;
+    padding-left: 25px;
+  }
 
   a {
     color: #000;
