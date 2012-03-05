@@ -1,3 +1,10 @@
 = form_tag({}, { :multipart => true }) do
-  = file_field_tag 'images[]', :multiple => true
-  = submit_tag
+  = file_field_tag 'images[]', :multiple => true, :id => 'files-upload'
+  = submit_tag 'Upload'
+
+%p{ :id => 'drop-area' }
+  %span{ :class => 'drop-instructions' } or drag and drop files here
+  %span{ :class => 'drop-over' } Drop files here!
+
+%ul{ :id => 'file-list' }
+  %li{ :class => 'no-items' } (no files uploaded yet)
