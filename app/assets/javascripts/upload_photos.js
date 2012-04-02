@@ -7,7 +7,7 @@ $(function () {
     function uploadFile(file) {
       var li = $('<li class="photo_thumb" />'),
         div = $('<div />'),
-        img,
+        canvas,
         progressBarContainer = $('<div />'),
         progressBar = $('<div />'),
         reader,
@@ -26,15 +26,18 @@ $(function () {
         present a preview in the file list
       */
       if (typeof FileReader !== 'undefined' && (/image/i).test(file.type)) {
-        img = $('<img />');
-        li.append(img);
+        canvas = $('<canvas width="100" height="100" />');
+        li.append(canvas);
         reader = new FileReader();
-        reader.onload = (function (theImg) {
+        reader.onload = (function (theCanvas) {
           return function (event) {
-            theImg.attr('src', event.target.result);
-            theImg.attr('width', 100);
+            var imageObj = new Image();
+            imageObj.onload = function() {
+              thumbnailer(theCanvas, imageObj, 100, 3);
+            };
+            imageObj.src = event.target.result;
           };
-        }(img));
+        }(canvas.get(0)));
         reader.readAsDataURL(file);
       }
 
