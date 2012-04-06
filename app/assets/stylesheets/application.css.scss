@@ -13,13 +13,16 @@ body {
 }
 
 .content {
-  margin-left: 200px;
-  padding: 15px 20px;
+  position: absolute;
+  top: 15px;
+  left: 220px;
+  right: 20px;
+  bottom: 15px;
 
-  .photos_list {
+  .thumbs_list {
     overflow: hidden;
 
-    .photo_thumb {
+    .thumb {
       float: left;
       width: 105px;
       height: 145px;
@@ -30,6 +33,27 @@ body {
         border: 1px solid #999;
         box-shadow: 2px 2px 2px 0 #000;
       }
+    }
+  }
+
+  .photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 20px;
+    }
+
+    .title {
+      position: absolute;
+      bottom: 0;
     }
   }
 }
