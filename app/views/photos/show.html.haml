@@ -1,13 +1,13 @@
 .photo
   .image= image_tag(@photo.image.url, 'data-image-width' => @photo.image_width, 'data-image-height' => @photo.image_height)
-  .title= @photo.title
+  = render :partial => 'editable_attr', :locals => { :attr_name => 'title', :attr_value => @photo.title }
   - unless @photo.tag_list.empty?
     .tags= @photo.tag_list
 
 :javascript
   $(function() {
     $(window).bind('load resize', function() {
-      $('.image img').each(function() {
+      $('.photo .image img').each(function() {
         var imageElement = $(this);
         var imageContainer = $(this).parent('.image');
         if (imageElement.data('imageWidth') / imageElement.data('imageHeight') >= imageContainer.innerWidth() / imageContainer.innerHeight()) {
@@ -16,5 +16,17 @@
           imageElement.css('height', imageContainer.innerHeight() + 'px');
         }
       });
+    });
+
+    $('.photo').on('click', '.editable_attr.title a', function() {
+      $('.photo. .title').load('#{edit_photo_path(@photo)}', function() {
+        $('.photo .title form').submit(function() {
+          $.post($(this).attr('action'), $(this).serialize(), function(data) {
+            $('.photo .title').html(data);
+          });
+          return false;
+        });
+      });
+      return false;
     });
   });

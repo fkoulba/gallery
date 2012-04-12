@@ -10,14 +10,26 @@ class PhotosController < ApplicationController
 
   def edit
     @photo = Photo.find(params[:id])
+    if request.xhr?
+      render :partial => 'form'
+    end
   end
 
   def update
+    @photo = Photo.find(params[:id])
     if params[:photo]
       if @photo.update_attributes(params[:photo])
-        redirect_to(@photo)
+        if request.xhr?
+          render :partial => 'editable_attr', :locals => { :attr_name => params[:photo].keys.first, :attr_value => params[:photo].values.first }
+        else
+          redirect_to(@photo)
+        end
       else
-        render :action => 'edit'
+        if request.xhr?
+          render :partial => 'form'
+        else
+          render 'edit'
+        end
       end
     end
   end
