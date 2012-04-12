@@ -10,6 +10,7 @@ class PhotosController < ApplicationController
 
   def edit
     @photo = Photo.find(params[:id])
+    @attr_name = params[:attr]
     if request.xhr?
       render :partial => 'form'
     end

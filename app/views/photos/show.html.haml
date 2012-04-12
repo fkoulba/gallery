@@ -1,8 +1,7 @@
 .photo
   .image= image_tag(@photo.image.url, 'data-image-width' => @photo.image_width, 'data-image-height' => @photo.image_height)
   = render :partial => 'editable_attr', :locals => { :attr_name => 'title', :attr_value => @photo.title }
-  - unless @photo.tag_list.empty?
-    .tags= @photo.tag_list
+  = render :partial => 'editable_attr', :locals => { :attr_name => 'tag_list', :attr_value => @photo.tag_list.empty? ? 'no tags' : @photo.tag_list }
 
 :javascript
   $(function() {
@@ -18,11 +17,15 @@
       });
     });
 
-    $('.photo').on('click', '.editable_attr.title a', function() {
-      $('.photo. .title').load('#{edit_photo_path(@photo)}', function() {
-        $('.photo .title form').submit(function() {
-          $.post($(this).attr('action'), $(this).serialize(), function(data) {
-            $('.photo .title').html(data);
+    $('.photo').on('click', '.editable_attr a', function() {
+      var container = $(this).parent();
+      var attr = container.data('attr_name');
+      // FIXME: fix attr sending
+      container.load('#{edit_photo_path(@photo)}?attr=' + encodeURIComponent(attr), function() {
+        container.find('form').submit(function() {
+          // FIXME: fix attr sending
+          $.post($(this).attr('action'), $(this).serialize() + '&attr=' + encodeURIComponent(attr), function(data) {
+            container.replaceWith(data);
           });
           return false;
         });
