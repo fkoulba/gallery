@@ -3,6 +3,7 @@ Gallery::Application.routes.draw do
   resources :photos do
     collection do
       match 'upload'
+      get 'by-tag/:tag' => 'photos#index', :as => :tagged
     end
   end
 

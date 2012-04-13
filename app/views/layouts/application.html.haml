@@ -11,3 +11,8 @@
       %ul
         %li= link_to 'Library', photos_path
         %li= link_to 'Upload', upload_photos_path
+        %li
+          Tags
+          %ul.tags_list
+            - Tag.all.each do |tag|
+              %li.tag= link_to tag.name, tagged_photos_path(:tag => tag.name)

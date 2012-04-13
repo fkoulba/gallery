@@ -1,7 +1,11 @@
 class PhotosController < ApplicationController
 
   def index
-    @photos = Photo.all
+    if params[:tag]
+      @photos = Photo.tagged_with(params[:tag])
+    else
+      @photos = Photo.all
+    end
   end
 
   def show
