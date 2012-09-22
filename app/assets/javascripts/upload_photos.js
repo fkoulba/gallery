@@ -1,39 +1,50 @@
 $(function () {
   (function () {
-    var filesUpload = $('#files-upload'),
-      dropArea = $('#drop-area'),
-      fileList = $('#file-list');
+    var filesUpload = $('#files-upload');
+    var dropArea = $('#drop-area');
+    var fileList = $('#file-list');
 
-    function uploadFile(file) {
-      var li = $('<li class="photo_thumb" />'),
-        div = $('<div />'),
-        canvas,
-        progressBarContainer = $('<div />'),
-        progressBar = $('<div />'),
-        reader,
-        xhr,
-        fileInfo;
+    var queue = [];
+    var ready = true;
 
-      li.append(div);
+    var reader = new FileReader();
+    var imageObj = new Image();
 
-      progressBarContainer.addClass('progress-bar-container');
-      progressBar.addClass('progress-bar');
-      progressBarContainer.append(progressBar);
-      li.append(progressBarContainer);
+    function generateThumbnails(files) {
+      if (typeof files !== 'undefined') {
+        for (var i = 0, l = files.length; i < l; i++) {
+          queue.push(files[i]);
+          console.log(i);
+        }
+      } else {
+        fileList.innerHTML = 'No support for the File API in this web browser';
+      }
+    }
 
-      /*
-        If the file is an image and the web browser supports FileReader,
-        present a preview in the file list
-      */
+    setInterval(function() {
+      console.log('check');
+      if (ready && queue.length > 0) {
+        ready = false;
+        console.log('start', queue.length);
+        generateThumbnail(queue.shift());
+      }
+    }, 1000);
+
+    function generateThumbnail(file) {
+      console.log(file);
+
+      var li = $('<li class="photo_thumb" />');
+
       if (typeof FileReader !== 'undefined' && (/image/i).test(file.type)) {
-        canvas = $('<canvas width="100" height="100" />');
+        var canvas = $('<canvas width="100" height="100" />');
         li.append(canvas);
-        reader = new FileReader();
+
         reader.onload = (function (theCanvas) {
           return function (event) {
-            var imageObj = new Image();
             imageObj.onload = function() {
-              thumbnailer(theCanvas, imageObj, 100, 3);
+              theCanvas.getContext('2d').drawImage(imageObj, 0, 0, 100, 100);
+              ready = true;
+              imageObj.src = '';
             };
             imageObj.src = event.target.result;
           };
@@ -41,58 +52,11 @@ $(function () {
         reader.readAsDataURL(file);
       }
 
-      /*// Uploading - for Firefox, Google Chrome and Safari
-      xhr = new XMLHttpRequest();
-
-      // Update progress bar
-      xhr.upload.addEventListener('progress', function (event) {
-        if (event.lengthComputable) {
-          progressBar.css('width', (event.loaded / event.total) * 100 + '%');
-        }
-        else {
-          // No data to calculate on
-        }
-      }, false);
-
-      // File uploaded
-      xhr.addEventListener('load', function () {
-        progressBarContainer.addClass('uploaded');
-        progressBar.html('Uploaded!');
-      }, false);
-
-      xhr.open('post', 'upload/upload.php', true);
-
-      // Set appropriate headers
-      xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-      xhr.setRequestHeader('X-File-Name', file.fileName);
-      xhr.setRequestHeader('X-File-Size', file.fileSize);
-      xhr.setRequestHeader('X-File-Type', file.type);
-
-      // Send the file (doh)
-      xhr.send(file);*/
-
-      // Present file info and append it to the list of files
-      fileInfo = '<div><strong>Name:</strong> ' + file.name + '</div>';
-      fileInfo += '<div><strong>Size:</strong> ' + parseInt(file.size / 1024, 10) + ' kb</div>';
-      fileInfo += '<div><strong>Type:</strong> ' + file.type + '</div>';
-      div.innerHTML = fileInfo;
-
       fileList.append(li);
     }
 
-    function traverseFiles(files) {
-      if (typeof files !== 'undefined') {
-        for (var i=0, l=files.length; i<l; i++) {
-          uploadFile(files[i]);
-        }
-      }
-      else {
-        fileList.innerHTML = 'No support for the File API in this web browser';
-      }
-    }
-
     filesUpload.bind('change', function () {
-      traverseFiles(this.files);
+      generateThumbnails(this.files);
     });
 
     dropArea.bind({
@@ -115,7 +79,7 @@ $(function () {
       },
 
       drop: function (event) {
-        traverseFiles(event.originalEvent.dataTransfer.files);
+        generateThumbnails(event.originalEvent.dataTransfer.files);
         $(this).removeClass('over');
         return false;
       }
