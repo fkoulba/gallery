@@ -17,7 +17,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   process :strip
   process :convert => 'jpg'
   process :quality => 85
-  process :capture_dimenstions_and_shot_at
+  process :capture_dimensions_and_shot_at
 
   version :thumb do
     process :resize_to_fill => [100, 100]
@@ -27,7 +27,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     %w(jpg jpeg gif png)
   end
 
-  def capture_dimenstions_and_shot_at
+  def capture_dimensions_and_shot_at
     model.image_width = get_image_attr('width')
     model.image_height = get_image_attr('height')
     model.shot_at = (get_exif_tag('DateTimeOriginal').gsub(/(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/, '\1-\2-\3 \4:\5:\6').to_time rescue Time.now)
