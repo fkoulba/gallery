@@ -31,24 +31,25 @@ $(function () {
     }, 1000);
 
     function generateThumbnail(file) {
-      console.log(file);
+      var canvas = $('<canvas width="100" height="100" />');
 
       var li = $('<li class="photo_thumb" />');
 
-      if (typeof FileReader !== 'undefined' && (/image/i).test(file.type)) {
-        var canvas = $('<canvas width="100" height="100" />');
-        li.append(canvas);
+      var img = $('<img width="100" height="100" />');
 
-        reader.onload = (function (theCanvas) {
-          return function (event) {
-            imageObj.onload = function() {
-              theCanvas.getContext('2d').drawImage(imageObj, 0, 0, 100, 100);
-              ready = true;
-              imageObj.src = '';
-            };
-            imageObj.src = event.target.result;
+      if (typeof FileReader !== 'undefined' && (/image/i).test(file.type)) {
+        li.append(img);
+
+        reader.onload = function(event) {
+          imageObj.onload = function() {
+            canvas.get(0).getContext('2d').drawImage(imageObj, 0, 0, 100, 100);
+            ready = true;
+            imageObj.src = '';
+
+            img.get(0).src = canvas.get(0).toDataURL();
           };
-        }(canvas.get(0)));
+          imageObj.src = event.target.result;
+        };
         reader.readAsDataURL(file);
       }
 
