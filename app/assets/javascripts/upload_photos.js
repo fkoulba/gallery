@@ -1,95 +1,60 @@
 $(function () {
   (function () {
-    var filesUpload = $('#files-upload'),
-      dropArea = $('#drop-area'),
-      fileList = $('#file-list');
+    var filesUpload = $('#files-upload');
+    var dropArea = $('#drop-area');
+    var fileList = $('#file-list');
 
-    function uploadFile(file) {
-      var li = $('<li class="photo_thumb" />'),
-        div = $('<div />'),
-        img,
-        progressBarContainer = $('<div />'),
-        progressBar = $('<div />'),
-        reader,
-        xhr,
-        fileInfo;
+    var queue = [];
+    var ready = true;
 
-      li.append(div);
+    var reader = new FileReader();
+    var imageObj = new Image();
 
-      progressBarContainer.addClass('progress-bar-container');
-      progressBar.addClass('progress-bar');
-      progressBarContainer.append(progressBar);
-      li.append(progressBarContainer);
-
-      /*
-        If the file is an image and the web browser supports FileReader,
-        present a preview in the file list
-      */
-      if (typeof FileReader !== 'undefined' && (/image/i).test(file.type)) {
-        img = $('<img />');
-        li.append(img);
-        reader = new FileReader();
-        reader.onload = (function (theImg) {
-          return function (event) {
-            theImg.attr('src', event.target.result);
-            theImg.attr('width', 100);
-          };
-        }(img));
-        reader.readAsDataURL(file);
-      }
-
-      /*// Uploading - for Firefox, Google Chrome and Safari
-      xhr = new XMLHttpRequest();
-
-      // Update progress bar
-      xhr.upload.addEventListener('progress', function (event) {
-        if (event.lengthComputable) {
-          progressBar.css('width', (event.loaded / event.total) * 100 + '%');
-        }
-        else {
-          // No data to calculate on
-        }
-      }, false);
-
-      // File uploaded
-      xhr.addEventListener('load', function () {
-        progressBarContainer.addClass('uploaded');
-        progressBar.html('Uploaded!');
-      }, false);
-
-      xhr.open('post', 'upload/upload.php', true);
-
-      // Set appropriate headers
-      xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-      xhr.setRequestHeader('X-File-Name', file.fileName);
-      xhr.setRequestHeader('X-File-Size', file.fileSize);
-      xhr.setRequestHeader('X-File-Type', file.type);
-
-      // Send the file (doh)
-      xhr.send(file);*/
-
-      // Present file info and append it to the list of files
-      fileInfo = '<div><strong>Name:</strong> ' + file.name + '</div>';
-      fileInfo += '<div><strong>Size:</strong> ' + parseInt(file.size / 1024, 10) + ' kb</div>';
-      fileInfo += '<div><strong>Type:</strong> ' + file.type + '</div>';
-      div.innerHTML = fileInfo;
-
-      fileList.append(li);
-    }
-
-    function traverseFiles(files) {
+    function generateThumbnails(files) {
       if (typeof files !== 'undefined') {
-        for (var i=0, l=files.length; i<l; i++) {
-          uploadFile(files[i]);
+        for (var i = 0, l = files.length; i < l; i++) {
+          queue.push(files[i]);
         }
-      }
-      else {
+      } else {
         fileList.innerHTML = 'No support for the File API in this web browser';
       }
     }
 
+    setInterval(function() {
+      if (ready && queue.length > 0) {
+        ready = false;
+        generateThumbnail(queue.shift());
+      }
+    }, 1000);
+
+    function generateThumbnail(file) {
+      var canvas = $('<canvas width="100" height="100" />');
+
+      var li = $('<li class="photo_thumb" />');
+
+      var img = $('<img width="100" height="100" />');
+
+      if (typeof FileReader !== 'undefined' && (/image/i).test(file.type)) {
+        li.append(img);
+
+        reader.onload = function(event) {
+          imageObj.onload = function() {
+            canvas.get(0).getContext('2d').drawImage(imageObj, 0, 0, 100, 100);
+            ready = true;
+            imageObj.src = '';
+
+            img.get(0).src = canvas.get(0).toDataURL();
+          };
+          imageObj.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      fileList.append(li);
+    }
+
     filesUpload.bind('change', function () {
-      traverseFiles(this.files);
+      generateThumbnails(this.files);
     });
 
     dropArea.bind({
@@ -112,7 +77,7 @@ $(function () {
       },
 
       drop: function (event) {
-        traverseFiles(event.originalEvent.dataTransfer.files);
+        generateThumbnails(event.originalEvent.dataTransfer.files);
         $(this).removeClass('over');
         return false;
       }
