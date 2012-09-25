@@ -14,7 +14,6 @@ $(function () {
       if (typeof files !== 'undefined') {
         for (var i = 0, l = files.length; i < l; i++) {
           queue.push(files[i]);
-          console.log(i);
         }
       } else {
         fileList.innerHTML = 'No support for the File API in this web browser';
@@ -22,10 +21,8 @@ $(function () {
     }
 
     setInterval(function() {
-      console.log('check');
       if (ready && queue.length > 0) {
         ready = false;
-        console.log('start', queue.length);
         generateThumbnail(queue.shift());
       }
     }, 1000);
