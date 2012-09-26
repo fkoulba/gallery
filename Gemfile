@@ -42,5 +42,6 @@ gem 'mini_magick'
 
 gem 'haml-rails'
 
+gem 'daemons'
 gem 'delayed_job_active_record'
 gem 'carrierwave_backgrounder'
