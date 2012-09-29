@@ -9,14 +9,20 @@ $(function () {
 
     var reader = new FileReader();
     var imageObj = new Image();
+    var canvas = $('<canvas width="100" height="100" />');
+
+    var thumbnailWidth = 100;
+    var thumbnailHeight = 100;
 
     function generateThumbnails(files) {
       if (typeof files !== 'undefined') {
         for (var i = 0, l = files.length; i < l; i++) {
-          queue.push(files[i]);
+          var file = files[i];
+          if ((/image/i).test(file.type)) {
+            console.log(file);
+            queue.push(file);
+          }
         }
-      } else {
-        fileList.innerHTML = 'No support for the File API in this web browser';
       }
     }
 
@@ -28,22 +34,20 @@ $(function () {
     }, 1000);
 
     function generateThumbnail(file) {
-      var canvas = $('<canvas width="100" height="100" />');
+      var li = $('<li class="thumb"><div class="image"><img width="' + thumbnailWidth + '" height="' + thumbnailHeight + '" /></div><div class="title">' + file.name + '</div><div class="tags" /></li>');
 
-      var li = $('<li class="photo_thumb" />');
+      var img = li.find('img');
 
-      var img = $('<img width="100" height="100" />');
-
-      if (typeof FileReader !== 'undefined' && (/image/i).test(file.type)) {
-        li.append(img);
-
+      if (typeof(reader) !== 'undefined') {
         reader.onload = function(event) {
           imageObj.onload = function() {
-            canvas.get(0).getContext('2d').drawImage(imageObj, 0, 0, 100, 100);
-            ready = true;
-            imageObj.src = '';
-
+            canvas.get(0).getContext('2d').drawImage(imageObj, 0, 0, thumbnailWidth, thumbnailHeight);
             img.get(0).src = canvas.get(0).toDataURL();
+
+            ready = true;
+
+            imageObj.src = '';
+            canvas.get(0).getContext('2d').clearRect(0, 0, thumbnailWidth, thumbnailHeight);
           };
           imageObj.src = event.target.result;
         };
