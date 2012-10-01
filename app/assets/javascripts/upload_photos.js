@@ -9,7 +9,7 @@ $(function () {
 
     var reader = new FileReader();
     var imageObj = new Image();
-    var canvas = $('<canvas width="100" height="100" />');
+    var canvas = $('<canvas width="100" height="100" />').get(0);
 
     var thumbnailWidth = 100;
     var thumbnailHeight = 100;
@@ -41,13 +41,13 @@ $(function () {
       if (typeof(reader) !== 'undefined') {
         reader.onload = function(event) {
           imageObj.onload = function() {
-            canvas.get(0).getContext('2d').drawImage(imageObj, 0, 0, thumbnailWidth, thumbnailHeight);
-            img.get(0).src = canvas.get(0).toDataURL();
-
-            ready = true;
+            canvas.getContext('2d').drawImage(imageObj, 0, 0, thumbnailWidth, thumbnailHeight);
+            img.get(0).src = canvas.toDataURL();
 
             imageObj.src = '';
-            canvas.get(0).getContext('2d').clearRect(0, 0, thumbnailWidth, thumbnailHeight);
+            canvas.getContext('2d').clearRect(0, 0, thumbnailWidth, thumbnailHeight);
+
+            ready = true;
           };
           imageObj.src = event.target.result;
         };
