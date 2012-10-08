@@ -19,8 +19,14 @@ $(function () {
         for (var i = 0, l = files.length; i < l; i++) {
           var file = files[i];
           if ((/image/i).test(file.type)) {
-            console.log(file);
-            queue.push(file);
+            var li = $('<li class="thumb"><div class="image"><img src="<%= asset_path 'default-thumbnail.png' %>" width="' + thumbnailWidth + '" height="' + thumbnailHeight + '" /></div><div class="title">' + file.name + '</div><div class="size">' + getReadableFileSizeString(file.size) + '</div></li>');
+
+            fileList.append(li);
+
+            queue.push({
+              'file': file,
+              'li': li,
+            });
           }
         }
       }
@@ -33,9 +39,9 @@ $(function () {
       }
     }, 1000);
 
-    function generateThumbnail(file) {
-      var li = $('<li class="thumb"><div class="image"><img width="' + thumbnailWidth + '" height="' + thumbnailHeight + '" /></div><div class="title">' + file.name + '</div><div class="tags" /></li>');
-
+    function generateThumbnail(item) {
+      var file = item.file;
+      var li = item.li;
       var img = li.find('img');
 
       if (typeof(reader) !== 'undefined') {
@@ -53,9 +59,19 @@ $(function () {
         };
         reader.readAsDataURL(file);
       }
-
-      fileList.append(li);
     }
+
+    function getReadableFileSizeString(fileSizeInBytes) {
+
+        var i = -1;
+        var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+        do {
+            fileSizeInBytes = fileSizeInBytes / 1024;
+            i++;
+        } while (fileSizeInBytes > 1024);
+
+        return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+    };
 
     filesUpload.bind('change', function () {
       generateThumbnails(this.files);
