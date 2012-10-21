@@ -20,9 +20,9 @@ $(function () {
     var thumbnailHeight = 100;
 
     uploadForm.submit(function() {
-        doUpload = true;
+      doUpload = true;
 
-        return false;
+      return false;
     });
 
     filesUpload.hide();
@@ -95,14 +95,14 @@ $(function () {
     }
 
     function getReadableFileSizeString(fileSizeInBytes) {
-        var i = -1;
-        var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
-        do {
-            fileSizeInBytes = fileSizeInBytes / 1024;
-            i++;
-        } while (fileSizeInBytes > 1024);
+      var i = -1;
+      var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+      do {
+        fileSizeInBytes = fileSizeInBytes / 1024;
+        i++;
+      } while (fileSizeInBytes > 1024);
 
-        return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+      return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
     };
 
     filesUpload.bind('change', function () {
@@ -140,23 +140,22 @@ $(function () {
       formData.append(filesUpload.attr('name'), queueItem.file);
 
       $.ajax(uploadForm.attr('action'), {
-          type: 'POST',
-          mimeType: 'multipart/form-data',
-          contentType: false,
-          data: formData,
-          processData: false,
-          error: function() {
-            queueItem.li.addClass('error');
-          },
-          success: function() {
-            queueItem.li.addClass('uploaded');
-          },
-          complete: function() {
-            uploadReady = true;
-          }
+        type: 'POST',
+        mimeType: 'multipart/form-data',
+        contentType: false,
+        data: formData,
+        processData: false,
+        error: function() {
+          queueItem.li.addClass('error');
+        },
+        success: function() {
+          queueItem.li.addClass('uploaded');
+        },
+        complete: function() {
+          uploadReady = true;
+        }
       });
     }
   })();
 });
-
 
