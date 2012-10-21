@@ -39,6 +39,14 @@ body {
     .add_photos_button .title {
       text-align: center;
     }
+
+    .thumb.uploaded img {
+      border-color: #00C800;
+    }
+
+    .thumb.error img {
+      border-color: #C80000;
+    }
   }
 
   .photo {

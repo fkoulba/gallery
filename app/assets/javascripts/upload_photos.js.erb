@@ -1,11 +1,16 @@
 $(function () {
   (function () {
+    var uploadForm = $('.upload_form');
     var filesUpload = $('.upload_images');
     var fileList = $('.upload_list');
     var addPhotosButton = fileList.find('.add_photos_button');
 
-    var queue = [];
-    var ready = true;
+    var thumbnailQueue = [];
+    var thumbnailReady = true;
+
+    var uploadQueue = [];
+    var doUpload = false;
+    var uploadReady = true;
 
     var reader = new FileReader();
     var imageObj = new Image();
@@ -14,13 +19,19 @@ $(function () {
     var thumbnailWidth = 100;
     var thumbnailHeight = 100;
 
+    uploadForm.submit(function() {
+        doUpload = true;
+
+        return false;
+    });
+
     filesUpload.hide();
 
     addPhotosButton.click(function() {
       filesUpload.trigger('click');
     });
 
-    function generateThumbnails(files) {
+    function queueFiles(files) {
       if (typeof files !== 'undefined') {
         for (var i = 0, l = files.length; i < l; i++) {
           var file = files[i];
@@ -29,27 +40,41 @@ $(function () {
 
             li.insertBefore(fileList.find('.add_photos_button'));
 
-            queue.push({
+            thumbnailQueue.push({
               'file': file,
               'li': li,
+            });
+
+            uploadQueue.push({
+              'file': file,
+              'li': li
             });
           }
         }
       }
     }
 
-    var generateThumbnailsElement = $('#generate_thumbnails');
+    var queueFilesElement = $('#generate_thumbnails');
 
     setInterval(function() {
-      if (generateThumbnailsElement.is(':checked') && ready && queue.length > 0) {
-        ready = false;
-        generateThumbnail(queue.shift());
+      if (queueFilesElement.is(':checked') && thumbnailReady && thumbnailQueue.length > 0) {
+        thumbnailReady = false;
+        generateThumbnail(thumbnailQueue.shift());
       }
     }, 1000);
 
-    function generateThumbnail(item) {
-      var file = item.file;
-      var li = item.li;
+    setInterval(function() {
+      if (doUpload && uploadReady && uploadQueue.length > 0) {
+        uploadReady = false;
+        uploadFile(uploadQueue.shift());
+      } else if (uploadQueue.length <= 0) {
+        doUpload = false;
+      }
+    }, 500);
+
+    function generateThumbnail(queueItem) {
+      var file = queueItem.file;
+      var li = queueItem.li;
       var img = li.find('img');
 
       if (typeof(reader) !== 'undefined') {
@@ -61,7 +86,7 @@ $(function () {
             imageObj.src = '';
             canvas.getContext('2d').clearRect(0, 0, thumbnailWidth, thumbnailHeight);
 
-            ready = true;
+            thumbnailReady = true;
           };
           imageObj.src = event.target.result;
         };
@@ -81,7 +106,7 @@ $(function () {
     };
 
     filesUpload.bind('change', function () {
-      generateThumbnails(this.files);
+      queueFiles(this.files);
     });
 
     fileList.bind({
@@ -104,11 +129,33 @@ $(function () {
       },
 
       drop: function (event) {
-        generateThumbnails(event.originalEvent.dataTransfer.files);
+        queueFiles(event.originalEvent.dataTransfer.files);
         $(this).removeClass('over');
         return false;
       }
     });
+
+    function uploadFile(queueItem) {
+      var formData = new FormData;
+      formData.append(filesUpload.attr('name'), queueItem.file);
+
+      $.ajax(uploadForm.attr('action'), {
+          type: 'POST',
+          mimeType: 'multipart/form-data',
+          contentType: false,
+          data: formData,
+          processData: false,
+          error: function() {
+            queueItem.li.addClass('error');
+          },
+          success: function() {
+            queueItem.li.addClass('uploaded');
+          },
+          complete: function() {
+            uploadReady = true;
+          }
+      });
+    }
   })();
 });
 

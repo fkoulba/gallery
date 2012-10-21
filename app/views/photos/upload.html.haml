@@ -1,4 +1,4 @@
-= form_tag({}, { :multipart => true }) do
+= form_tag({}, { :class => 'upload_form', :multipart => true }) do
   %p
     = file_field_tag 'images[]', :multiple => true, :class => 'upload_images'
     = submit_tag 'Upload'
