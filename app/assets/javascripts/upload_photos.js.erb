@@ -1,8 +1,8 @@
 $(function () {
   (function () {
-    var filesUpload = $('#files-upload');
-    var dropArea = $('#drop-area');
-    var fileList = $('#file-list');
+    var filesUpload = $('.upload_images');
+    var fileList = $('.upload_list');
+    var addPhotosButton = fileList.find('.add_photos_button');
 
     var queue = [];
     var ready = true;
@@ -14,6 +14,12 @@ $(function () {
     var thumbnailWidth = 100;
     var thumbnailHeight = 100;
 
+    filesUpload.hide();
+
+    addPhotosButton.click(function() {
+      filesUpload.trigger('click');
+    });
+
     function generateThumbnails(files) {
       if (typeof files !== 'undefined') {
         for (var i = 0, l = files.length; i < l; i++) {
@@ -21,7 +27,7 @@ $(function () {
           if ((/image/i).test(file.type)) {
             var li = $('<li class="thumb"><div class="image"><img src="<%= asset_path 'default-thumbnail.png' %>" width="' + thumbnailWidth + '" height="' + thumbnailHeight + '" /></div><div class="title">' + file.name + '</div><div class="size">' + getReadableFileSizeString(file.size) + '</div></li>');
 
-            fileList.append(li);
+            li.insertBefore(fileList.find('.add_photos_button'));
 
             queue.push({
               'file': file,
@@ -64,7 +70,6 @@ $(function () {
     }
 
     function getReadableFileSizeString(fileSizeInBytes) {
-
         var i = -1;
         var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
         do {
@@ -79,11 +84,11 @@ $(function () {
       generateThumbnails(this.files);
     });
 
-    dropArea.bind({
+    fileList.bind({
       dragleave: function (event) {
         var target = event.target;
 
-        if (target && target === dropArea) {
+        if (target && target === fileList) {
           $(this).removeClass('over');
         }
         return false;

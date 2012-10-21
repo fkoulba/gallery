@@ -22,7 +22,8 @@ body {
   .thumbs_list {
     overflow: hidden;
 
-    .thumb {
+    .thumb,
+    .add_photos_button {
       float: left;
       width: 105px;
       height: 145px;
@@ -33,6 +34,10 @@ body {
         border: 1px solid #999;
         box-shadow: 2px 2px 2px 0 #000;
       }
+    }
+
+    .add_photos_button .title {
+      text-align: center;
     }
   }
 

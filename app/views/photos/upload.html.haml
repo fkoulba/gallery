@@ -1,13 +1,14 @@
 = form_tag({}, { :multipart => true }) do
   %p
-    = file_field_tag 'images[]', :multiple => true, :id => 'files-upload'
+    = file_field_tag 'images[]', :multiple => true, :class => 'upload_images'
     = submit_tag 'Upload'
   %p
     = check_box_tag 'generate_thumbnails', 1, true, :id => 'generate_thumbnails'
     = label_tag 'generate_thumbnails', 'Generate thumbnails'
 
-%p{ :id => 'drop-area' }
-  %span{ :class => 'drop-instructions' } or drag and drop files here
-  %span{ :class => 'drop-over' } Drop files here!
-
-%ul{ :id => 'file-list', :class => 'thumbs_list' }
+%ul{ :class => 'upload_list thumbs_list' }
+  %li.add_photos_button.thumb
+    .image
+      = image_tag('add-photos-button.png')
+    .title
+      Add photos
