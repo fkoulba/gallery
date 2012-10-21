@@ -145,6 +145,14 @@ $(function () {
         contentType: false,
         data: formData,
         processData: false,
+        progress: function(jqXHR, progressEvent) {
+          console.log(progressEvent);
+          if (progressEvent.lengthComputable) {
+            console.log("Loaded " + (Math.round(progressEvent.loaded / progressEvent.total * 100)) + "%");
+          } else {
+            console.log("Loading...");
+          }
+        },
         error: function() {
           queueItem.li.addClass('error');
         },
