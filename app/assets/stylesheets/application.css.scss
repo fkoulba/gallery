@@ -36,8 +36,12 @@ body {
       }
     }
 
-    .add_photos_button .title {
-      text-align: center;
+    .add_photos_button {
+      cursor: pointer;
+
+      .title {
+        text-align: center;
+      }
     }
 
     .thumb.uploaded img {
