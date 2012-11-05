@@ -1,6 +1,6 @@
 %ul.thumbs_list
   - @photos.each do |photo|
     %li.thumb
-      .image= link_to(image_tag(photo.image.url(:thumb), :size => '100x100'), photo_url(:id => photo.id))
+      .image= link_to(image_tag(photo.image_processing ? 'default-thumbnail.png' : photo.image.url(:thumb), :size => '100x100'), photo_url(:id => photo.id))
       .title{ :title => photo.title }= photo.title
       .tags{ :title => photo.tag_list }= photo.tag_list
