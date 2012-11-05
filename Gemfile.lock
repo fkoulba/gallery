@@ -45,6 +45,8 @@ GEM
     builder (3.0.0)
     carrierwave (0.5.8)
       activesupport (~> 3.0)
+    carrierwave_backgrounder (0.0.7)
+      carrierwave (~> 0.5)
     cocaine (0.2.1)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)
@@ -53,6 +55,12 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.2.0)
+    daemons (1.1.9)
+    delayed_job (3.0.3)
+      activesupport (~> 3.0)
+    delayed_job_active_record (0.3.2)
+      activerecord (> 2.1.0)
+      delayed_job (~> 3.0.0)
     erubis (2.7.0)
     execjs (1.2.13)
       multi_json (~> 1.0)
@@ -135,7 +143,10 @@ PLATFORMS
 DEPENDENCIES
   acts-as-taggable-on (~> 2.2.0)
   carrierwave
+  carrierwave_backgrounder
   coffee-rails (~> 3.1.1)
+  daemons
+  delayed_job_active_record
   haml-rails
   jquery-rails
   json

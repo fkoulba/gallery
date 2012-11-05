@@ -1,6 +1,7 @@
 class Photo < ActiveRecord::Base
 
   mount_uploader :image, ImageUploader
+  process_in_background :image
 
   acts_as_taggable
 
