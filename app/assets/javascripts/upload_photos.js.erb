@@ -20,7 +20,7 @@ $(function () {
     var thumbnailHeight = 100;
 
     uploadForm.submit(function() {
-      doUpload = true;
+      startUploading();
 
       return false;
     });
@@ -40,14 +40,11 @@ $(function () {
 
             li.insertBefore(fileList.find('.add_photos_button'));
 
+            li.data('file', file);
+
             thumbnailQueue.push({
               'file': file,
               'li': li,
-            });
-
-            uploadQueue.push({
-              'file': file,
-              'li': li
             });
           }
         }
@@ -68,7 +65,7 @@ $(function () {
         uploadReady = false;
         uploadFile(uploadQueue.shift());
       } else if (uploadQueue.length <= 0) {
-        doUpload = false;
+        stopUploading();
       }
     }, 500);
 
@@ -135,7 +132,37 @@ $(function () {
       }
     });
 
+    function startUploading() {
+      if (doUpload) {
+        return;
+      }
+
+      uploadForm.find('input[type=submit]').attr('disabled', 'disabled');
+
+      uploadQueue = [];
+
+      fileList.find('li.thumb').not('.uploading, .uploaded').each(function() {
+        var li = $(this);
+        uploadQueue.push({
+          'file': li.data('file'),
+          'li': li
+        });
+      });
+
+      console.log(uploadQueue);
+
+      doUpload = true;
+    }
+
+    function stopUploading() {
+      doUpload = false;
+
+      uploadForm.find('input[type=submit]').removeAttr('disabled');
+    }
+
     function uploadFile(queueItem) {
+      queueItem.li.addClass('uploading');
+
       var formData = new FormData;
       formData.append(filesUpload.attr('name'), queueItem.file);
 
@@ -152,6 +179,7 @@ $(function () {
           queueItem.li.addClass('uploaded');
         },
         complete: function() {
+          queueItem.li.removeClass('uploading');
           uploadReady = true;
         }
       });

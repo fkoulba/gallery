@@ -44,6 +44,10 @@ body {
       }
     }
 
+    .thumb.uploading img {
+      border-color: #0000C8;
+    }
+
     .thumb.uploaded img {
       border-color: #00C800;
     }
