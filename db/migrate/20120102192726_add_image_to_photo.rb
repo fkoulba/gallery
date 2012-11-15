@@ -1,11 +1,15 @@
 class AddImageToPhoto < ActiveRecord::Migration
   def self.up
-    change_table :photos do |t|
-      t.has_attached_file :image
-    end
+    add_column :photos, :image_file_name, :string
+    add_column :photos, :image_content_type, :string
+    add_column :photos, :image_file_size, :string
+    add_column :photos, :image_updated_at, :datetime
   end
 
   def self.down
-    drop_attached_file :photos, :image
+    remove_column :photos, :image_file_name
+    remove_column :photos, :image_content_type
+    remove_column :photos, :image_file_size
+    remove_column :photos, :image_updated_at
   end
 end
